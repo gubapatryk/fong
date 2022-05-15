@@ -27,21 +27,20 @@ public class HelloApplication extends Application {
     private StackPane pane;
 
     //eye, view of the user
-    private double[] eye = {0, 0, 1000};
+    private double[] eye = {0, 0, 100};
 
     //Ambient - diffuse - specular variables
-    private double[] ka = {0.4, 0.3, 0.4};
-    private double[] kd = {0.3, 0.9, 0.4};
-    private double[] ks = {0.1, 0.1, 0.8};
+    private double[] ka = {0.49, 0.473, 0.422};
+    private double[] kd = {0.90, 0.97, 0.98};
+    private double[] ks = {0.956, 0.937, 0.986};
 
     private int specPow = 3;
     //light values
-    private double[] lightCol = {0.9, 0.0, 0.2};
+    private double[] lightCol = {0.72, 0.45, 0.2};
     private double[] lightPos = {600, -100, 500};
 
 //*********************************************
 //*********************************************
-
     @Override
     public void start(Stage primaryStage) {
         //Insert code for a JavaFX program here.
@@ -78,7 +77,7 @@ public class HelloApplication extends Application {
 
                     //compute the reflection vector
                     double[] reflection = uv(reflectVect(light, normal));
-                    //compute individual formulae
+                    //compute individual formula
                     double[] ambRGB = ambient(ka, lightCol);
                     double[] diffRGB = diffuse(kd, light, normal, lightCol);
 
@@ -90,16 +89,13 @@ public class HelloApplication extends Application {
 
 
                     pixelWrite.setColor((int)(x + centerX), (int)(y + centerY),
-                            new Color(illumination[0],
-                                    illumination[1],
-                                    illumination[2], 1.0));
+                            new Color(normalize(illumination[0]),
+                                    normalize(illumination[1]),
+                                    normalize(illumination[2]), 1.0));
                 }
 
             }
         }
-
-
-//---------------------------------------------------
 
 
         //Create some subclass of Pane to later be binded to scene
@@ -112,6 +108,13 @@ public class HelloApplication extends Application {
         Scene scene = new Scene(pane, SCENE_WIDTH, SCENE_HEIGHT);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+    public double normalize(double value) {
+        if (value > 1)
+            return 1;
+        if (value < 0)
+            return 0;
+        return value;
     }
 
     private double sqr(double x) {return Math.pow(x, 2);}
